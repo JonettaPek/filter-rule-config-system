@@ -2,6 +2,9 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { MessagesModule } from 'primeng/messages';
+// import { ButtonModule } from 'primeng/button';
+// import { RippleModule } from 'primeng/ripple';
 
 interface MenuItem {
   label: string,
@@ -47,6 +50,11 @@ enum NumberCondition {
   NotEqualTo = '!='
 }
 
+interface Message {
+  severity: string,
+  detail: string
+}
+
 interface Subrule {
   field: FieldOption,
   fieldType: string,
@@ -57,7 +65,7 @@ interface Subrule {
 @Component({
   selector: 'app-rule-configuration',
   standalone: true,
-  imports: [DropdownModule, FormsModule, SplitButtonModule],
+  imports: [DropdownModule, FormsModule, SplitButtonModule, MessagesModule],
   templateUrl: './rule-configuration.component.html',
   styleUrl: './rule-configuration.component.css',
   encapsulation: ViewEncapsulation.None
@@ -78,6 +86,8 @@ export class RuleConfigurationComponent implements OnInit {
   valueInputType: string | undefined;
   
   value: string | number | undefined;
+
+  messages: Message[] = [];
 
   subrules: Array<Subrule> = [];
 
@@ -128,6 +138,8 @@ export class RuleConfigurationComponent implements OnInit {
   }
 
   handleAdd() {
+    this.validateValueInput();
+
     
 
   }
@@ -140,4 +152,61 @@ export class RuleConfigurationComponent implements OnInit {
     this.valueInputType = undefined;
     this.value = undefined;
   }
+
+  validateValueInput() {
+    if (this.selectedFieldOption === undefined
+      && this.selectedCondition === undefined
+      && this.value === undefined
+    ) {
+      this.messages = [{ severity: 'error', detail: 'Please select a Field Option and Condition, and enter a Value.' }];
+    } else if (this.selectedCondition === undefined
+      && (this.value === undefined
+        || this.value === ""
+      )
+    ) {
+      this.messages = [{ severity: 'error', detail: 'Please select a Condition, and enter a Value.' }];
+    } else if (this.selectedFieldOption === undefined
+      && this.selectedCondition === undefined
+    ) {
+      this.messages = [{ severity: 'error', detail: 'Please select a Field Option and Condition' }];
+    } else if (this.selectedFieldOption === undefined) {
+      this.messages = [{ severity: 'error', detail: 'Please select a Field Option.' }];
+    } else if (this.selectedCondition === undefined) {
+      this.messages = [{ severity: 'error', detail: 'Please select a Condition.' }];
+    } else if (this.value === undefined
+      || this.value === ""
+    ) {
+      this.messages = [{ severity: 'error', detail: 'Please enter a Value.' }];
+    } else if ((this.selectedFieldOption.name === FieldOptionName.Portfolio 
+        || this.selectedFieldOption.name === FieldOptionName.CounterParty) 
+      && !this.isValidString(this.value as string)) {
+      this.messages = [{ severity: 'error', detail: 'Please enter a Value containing only A-Z, a-z and spaces.' }];
+    } else if (this.selectedFieldOption.name === FieldOptionName.Price
+      && !this.isNumber(this.value as string)
+    ) {
+      this.messages = [{ severity: 'error', detail: 'Please enter a Value that is positive, negative or zero.' }];
+    } else {
+      this.messages = []
+    }
+  }
+
+  isValidString(inputString: string): boolean {
+    if (inputString.length === 0) { 
+        return false;
+    }
+
+    for (const char of inputString) {
+        if (!(char.match(/[a-zA-Z]/) || char === ' ')) {
+            return false;
+        }
+    }
+
+    return true;
+  }
+
+  isNumber(inputString: string): boolean {
+    const regex = /^-?\+?\d+$/;
+  
+    return regex.test(inputString);
+}
 }
