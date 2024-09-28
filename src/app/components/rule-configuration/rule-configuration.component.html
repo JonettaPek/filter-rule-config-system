@@ -1,4 +1,4 @@
-<div class="inputs">
+<div class="input-container">
     <div class="input">
         <label for="field-option-id">Field</label>
         <p-dropdown 
@@ -38,10 +38,15 @@
             [type]="valueInputType"
             [(ngModel)]="value"
         />
+    </div> 
+    <div class="input">
+        <div class="spacer"></div>
+        <p-splitButton 
+            class="jp-splitbutton-add"
+            label="Add" 
+            (onClick)="handleAdd()" 
+            [model]="menuItems" 
+        />
     </div>
-    <button 
-        type="button"
-        (click)="handleAdd()"
-    >Add</button>
 </div>
 

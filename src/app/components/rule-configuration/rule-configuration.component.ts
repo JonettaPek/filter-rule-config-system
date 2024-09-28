@@ -1,6 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
+import { SplitButtonModule } from 'primeng/splitbutton';
+
+interface MenuItem {
+  label: string,
+  command(): void
+}
 
 enum FieldOptionName {
   Portfolio = 'Portfolio',
@@ -51,11 +57,14 @@ interface Subrule {
 @Component({
   selector: 'app-rule-configuration',
   standalone: true,
-  imports: [DropdownModule, FormsModule],
+  imports: [DropdownModule, FormsModule, SplitButtonModule],
   templateUrl: './rule-configuration.component.html',
-  styleUrl: './rule-configuration.component.css'
+  styleUrl: './rule-configuration.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class RuleConfigurationComponent implements OnInit {
+  menuItems: MenuItem[];
+
   fieldOptions: FieldOption[] | undefined;
 
   selectedFieldOption: FieldOption | undefined;
@@ -71,6 +80,23 @@ export class RuleConfigurationComponent implements OnInit {
   value: string | number | undefined;
 
   subrules: Array<Subrule> = [];
+
+  constructor() {
+    this.menuItems = [
+      {
+        label: 'Add',
+        command: () => {
+          this.handleAdd();
+        }
+      },
+      {
+        label: 'Clear',
+        command: () => {
+          this.handleClear();
+        }
+      }
+    ]
+  }
 
   ngOnInit() {
       this.fieldOptions = [
@@ -104,5 +130,14 @@ export class RuleConfigurationComponent implements OnInit {
   handleAdd() {
     
 
+  }
+
+  handleClear() {
+    this.selectedFieldOption = undefined;
+    this.fieldType = undefined;
+    this.conditions =[];
+    this.selectedCondition = undefined;
+    this.valueInputType = undefined;
+    this.value = undefined;
   }
 }
