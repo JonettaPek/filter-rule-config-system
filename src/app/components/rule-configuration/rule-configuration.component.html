@@ -1,0 +1,47 @@
+<div class="inputs">
+    <div class="input">
+        <label for="field-option-id">Field</label>
+        <p-dropdown 
+            inputId="field-option-id"
+            [options]="fieldOptions" 
+            [(ngModel)]="selectedFieldOption" 
+            variant="filled"
+            optionLabel="name"
+            placeholder="Select a Field" 
+            (ngModelChange)="handleFieldTypeAndConditionAndValueInputs($event)"
+        />
+    </div>
+    <div class="input">
+        <label for="field-type-id">Field Type</label>
+        <input 
+            id="field-type-id" 
+            type="text"
+            pInputText="fieldType"
+            [disabled]="true" 
+            [(ngModel)]="fieldType"
+        />
+    </div>
+    <div class="input">
+        <label for="condition-id">Condition</label>
+        <p-dropdown 
+            inputId="condition-id"
+            [options]="conditions" 
+            [(ngModel)]="selectedCondition" 
+            variant="filled"
+            placeholder="Select a Condition"
+        />
+    </div>
+    <div class="input">
+        <label for="value-id">Value</label>
+        <input 
+            id="value-id"
+            [type]="valueInputType"
+            [(ngModel)]="value"
+        />
+    </div>
+    <button 
+        type="button"
+        (click)="handleAdd()"
+    >Add</button>
+</div>
+

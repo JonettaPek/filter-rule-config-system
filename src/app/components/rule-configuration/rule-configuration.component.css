@@ -1,0 +1,36 @@
+.inputs {
+    display: flex;
+    padding: 20px;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+
+    .input {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        input {
+            height: 43px;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid black;
+            font-size: medium;
+        }
+    }
+
+    button {
+        height: 43px;
+        width: 80px;
+        padding: 12px;
+        border-radius: 5px;
+        border: 1px solid black;
+
+        &:hover {
+            background-color: rgb(13, 110, 253);
+            color: white;
+            border-style: none;
+        }
+    }
+
+}
