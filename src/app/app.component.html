@@ -1,2 +1,6 @@
 <app-rule-configuration></app-rule-configuration>
+<div *ngFor="let field of fields">
+    <app-rule [field]="field"></app-rule>
+</div>
+
 <router-outlet />

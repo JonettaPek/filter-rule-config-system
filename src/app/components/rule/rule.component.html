@@ -1,0 +1,8 @@
+<p-card header={{field}}>
+    <div *ngFor="let subrule of (rules$ | async); let i = index">
+        <app-subrule
+            [index]="i"
+            [subrule]="subrule"
+        ></app-subrule>
+    </div>
+</p-card>

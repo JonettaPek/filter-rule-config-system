@@ -1,17 +1,15 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MessagesModule } from 'primeng/messages';
-// import { ButtonModule } from 'primeng/button';
-// import { RippleModule } from 'primeng/ripple';
 
 interface MenuItem {
   label: string,
   command(): void
 }
 
-enum FieldOptionName {
+export enum FieldOptionName {
   Portfolio = 'Portfolio',
   CounterParty = 'Counterparty',
   Price = 'Price'
@@ -23,7 +21,7 @@ enum FieldOptionCode {
   Price = 'price'
 }
 
-interface FieldOption {
+export interface FieldOption {
   name: FieldOptionName;
   code: FieldOptionCode;
 }
@@ -55,11 +53,28 @@ interface Message {
   detail: string
 }
 
-interface Subrule {
-  field: FieldOption,
-  fieldType: string,
-  condition: StringCondition | NumberCondition,
-  value: string | number
+class Subrule {
+  field: FieldOption | undefined
+  fieldType: string | undefined
+  condition: string | undefined
+  value: string | number | undefined
+
+  constructor(
+    field: FieldOption | undefined,
+    fieldType: string | undefined,
+    condition: string | undefined,
+    value: string | number | undefined
+  ) {
+    this.field = field;
+    this.fieldType = fieldType;
+    this.condition = condition;
+    this.value = value;
+  }
+}
+
+interface RuleNode {
+  logicalOperator: 'AND' | 'OR',
+  subrules: (Subrule | RuleNode)[]
 }
 
 @Component({
@@ -89,7 +104,10 @@ export class RuleConfigurationComponent implements OnInit {
 
   messages: Message[] = [];
 
-  subrules: Array<Subrule> = [];
+  rules: Map<FieldOption, RuleNode> = new Map<FieldOption, RuleNode>();
+
+  @Output()
+  newSubrule: Subrule | undefined;
 
   constructor() {
     this.menuItems = [
@@ -114,6 +132,8 @@ export class RuleConfigurationComponent implements OnInit {
           { name: FieldOptionName.CounterParty, code: FieldOptionCode.CounterParty },
           { name: FieldOptionName.Price, code: FieldOptionCode.Price }
       ];
+
+      
   }
 
   handleFieldTypeAndConditionAndValueInputs(value: FieldOption) {
@@ -140,8 +160,14 @@ export class RuleConfigurationComponent implements OnInit {
   handleAdd() {
     this.validateValueInput();
 
+    let newSubrule: Subrule = new Subrule(
+      this.selectedFieldOption,
+      this.fieldType,
+      this.selectedCondition,
+      this.value
+    )
     
-
+    this.newSubrule = newSubrule
   }
 
   handleClear() {
