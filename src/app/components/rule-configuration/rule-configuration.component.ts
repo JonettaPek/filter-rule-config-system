@@ -27,7 +27,7 @@ export enum FieldOptionName {
   Price = 'Price'
 }
 
-enum FieldOptionCode {
+export enum FieldOptionCode {
   Portfolio = 'portfolio',
   CounterParty = 'counterparty',
   Price = 'price'
@@ -38,20 +38,20 @@ export interface FieldOption {
   code: FieldOptionCode;
 }
 
-enum FieldType {
+export enum FieldType {
   String = 'string',
   Number = 'number',
   Date = 'Date'
 }
 
-enum StringCondition {
+export enum StringCondition {
   Containing = 'Containing',
   NotContaining = 'Not Containing',
   BeginningWith = 'Beginning With',
   EndingWith = 'Ending With'
 }
 
-enum NumberCondition {
+export enum NumberCondition {
   GreaterThan = '>',
   GreaterThanOrEqualTo = '>=',
   LessThan = '<',

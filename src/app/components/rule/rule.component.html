@@ -1,5 +1,5 @@
 <p-card header={{field}}>
-    <p-table [value]="rules" [tableStyle]="{ 'min-width': '50rem' }">
+    <p-table [value]="rules" [tableStyle]="{ 'min-width': '50rem' }" class="jp-table">
         <ng-template pTemplate="header">
             <tr>
                 <th>ID</th>
@@ -18,7 +18,7 @@
                 <td>{{ subrule.condition }}</td>
                 <td>{{ subrule.value }}</td>
                 <td>
-                    <p-speedDial [model]="actions" direction="right" />
+                    <p-speedDial [model]="getActions(subrule, index)" direction="right" />
                 </td>
             </tr>
         </ng-template>

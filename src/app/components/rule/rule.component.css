@@ -5,6 +5,11 @@
     border: 1px solid rgba(255, 255, 255, 0.125);
     color: white;
 
+    tr, th, td {
+        background-color: transparent;
+        color: white;
+    }
+
     tbody tr {
         height: 65px;
     }

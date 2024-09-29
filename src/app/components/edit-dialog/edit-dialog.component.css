@@ -1,0 +1,48 @@
+div.jp-inputs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+
+    span.jp-header {
+        color: white;
+        font-size: xx-large;
+        text-align: center;
+    }
+
+    div.jp-input {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+
+        label {
+            width: 90px;
+        }
+
+        input {
+            padding: 20px;
+            border-radius: 5px;
+            font-size: medium;
+            background-color: #fff;
+        }
+        
+        .p-inputwrapper, input {
+            height: 45px;
+            width: 250px;
+            border: 1px solid rgba(255, 255, 255, 0.125);
+        }
+
+    }
+
+    div.jp-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+        button {
+            width: 300px;
+        }
+        
+    }
+}

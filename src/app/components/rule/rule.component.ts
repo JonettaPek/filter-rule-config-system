@@ -12,37 +12,41 @@ import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { Subrule } from '../../states/portfolio-subrule/portfolio-subrule.reducer';
 import { SpeedDialModule } from 'primeng/speeddial';
-import { MenuItem, MessageService } from 'primeng/api';
+import { MenuItem } from 'primeng/api';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { editPortfolioSubrule } from '../../states/portfolio-subrule/portfolio-subrule.actions';
+import { Dialog } from 'primeng/dialog';
+import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 @Component({
   selector: 'app-rule',
   standalone: true,
-  imports: [CardModule, AsyncPipe, NgFor, TableModule, CommonModule, SpeedDialModule],
+  imports: [CardModule, AsyncPipe, NgFor, TableModule, CommonModule, SpeedDialModule, DynamicDialogModule],
   templateUrl: './rule.component.html',
   styleUrl: './rule.component.css',
   encapsulation: ViewEncapsulation.None,
-  providers: [MessageService]
+  providers: [DialogService]
 })
 export class RuleComponent implements OnInit, OnDestroy {
   @Input()
-  field: string = '';
+  field: string = 'Portfolio';
 
   rules$: Observable<Subrule[]> | undefined;
 
-  rules: Subrule[] = [];
+  rules: Subrule[] = [{
+    index: 0,
+    field: 'Portfolio',
+    fieldType: 'string',
+    condition: 'Containing',
+    value: 'SG'
+  }];
 
   // mock data
-  // {
-  //   index: 0,
-  //   field: 'Portfolio',
-  //   fieldType: 'string',
-  //   condition: 'Containing',
-  //   value: 'SG'
-  // }
+  
 
   actions: MenuItem[] = [];
   constructor(
     private store: Store<AppState>,
-    private messageService: MessageService
+    private dialogService: DialogService
   ) { 
   }
   
@@ -55,34 +59,51 @@ export class RuleComponent implements OnInit, OnDestroy {
       this.rules$ = this.store.select(priceSubrulesSlice)
     }
     
-    this.rules$?.subscribe(rules => {
-      this.rules = rules;
-    });
+    // this.rules$?.subscribe(rules => {
+    //   this.rules = rules;
+    // });
 
-    this.actions = [
+  }
+  
+  ngOnDestroy(): void {
+    // unsubscribe to custom observables
+  }
+  
+  getActions(subrule: Subrule, index: number): MenuItem[] {
+    return [
       {
-          icon: 'pi pi-pencil',
-          command: () => {
-              this.messageService.add({ severity: 'info', summary: 'Add', detail: 'Data Added' });
-          }
+        icon: 'pi pi-pencil',
+        command: () => {
+          this.dialogService.open(EditDialogComponent, {
+            width: '50vw',
+            height: '60vh',
+            showHeader: false,
+            contentStyle: {
+              background: '#111928',
+              opacity: '0.95',
+              color: 'white'
+            },
+            modal:true,
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+          })
+        }
       },
       {
           icon: 'pi pi-refresh',
           command: () => {
-              this.messageService.add({ severity: 'success', summary: 'Update', detail: 'Data Updated' });
+  
           }
       },
       {
           icon: 'pi pi-trash',
           command: () => {
-              this.messageService.add({ severity: 'error', summary: 'Delete', detail: 'Data Deleted' });
+  
           }
       }
     ];
-  }
-  
-  ngOnDestroy(): void {
-    // unsubscribe to custom observables
   }
 
 }
