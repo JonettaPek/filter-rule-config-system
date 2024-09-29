@@ -1,12 +1,13 @@
+/* Mobile First Design */
 .jp-rules-container {
     position: relative;
     z-index: 1;
     padding: 20px;
     display: grid;
     gap: 50px;
-    grid-template-columns: 900px 900px;
+    grid-template-columns: 900px;
     justify-content: space-around;
-    grid-template-rows: 500px;
+    grid-template-rows: 500px 500px 500px;
     
     .jp-rule {
         .p-card-body {
@@ -21,4 +22,56 @@
         }
     }
 
+}
+
+.jp-logical-container {
+    background-color: rgba(17, 25, 40, 0.75);
+    backdrop-filter: blur(19px) saturate(180%);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+    color: white;
+
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    gap: 50px;
+
+    .jp-logical {
+        display: flex;
+        flex-direction: row;
+        gap: 50px;
+        align-items: center;
+
+        button {
+            width: 230px;
+        }
+    }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .jp-rules-container {
+        grid-template-columns: 900px 900px;
+        grid-template-rows: 500px;
+    }
+} 
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    
 }

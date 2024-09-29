@@ -7,6 +7,7 @@ import { provideState, provideStore } from '@ngrx/store';
 import { PortfolioRuleReducer } from './states/portfolio-subrule/portfolio-subrule.reducer';
 import { CounterpartyRuleReducer } from './states/counterparty-subrule/counterparty-subrule.reducer';
 import { PriceRuleReducer } from './states/price-subrule/price-subrule.reducer';
+import { LogicalOperatorCombinationReducer } from './states/logical-operator-combination/logical-operator-combination.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,6 +26,14 @@ export const appConfig: ApplicationConfig = {
     provideState({
       name: 'priceRuleState',
       reducer: PriceRuleReducer
+    }),
+    provideState({
+      name: 'priceRuleState',
+      reducer: PriceRuleReducer
+    }),
+    provideState({
+      name: 'logicalOperatorCombinationState',
+      reducer: LogicalOperatorCombinationReducer
     })
   ]
 };

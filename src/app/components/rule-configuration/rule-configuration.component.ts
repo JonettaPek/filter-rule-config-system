@@ -15,6 +15,7 @@ import { counterpartySubrulesSlice } from '../../states/counterparty-subrule/cou
 import { priceSubrulesSlice } from '../../states/price-subrule/price-subrule.selector';
 import { addCounterpartySubrule } from '../../states/counterparty-subrule/counterparty-subrule.actions';
 import { addPriceSubrule } from '../../states/price-subrule/price-subrule.actions';
+import { addField, removeField } from '../../states/logical-operator-combination/logical-operator-combination.actions';
 
 interface MenuItem {
   label: string,
@@ -196,6 +197,13 @@ export class RuleConfigurationComponent implements OnInit {
               value: this.value as string || ""
           };
           this.store.dispatch(addPortfolioSubrule({ newSubrule }));
+          this.portfolioSubrules$.pipe(take(1)).subscribe(subrules => {
+            if (subrules.length > 0) {
+              this.store.dispatch(addField({ newField: FieldOptionName.Portfolio as string }))
+            } else if (subrules.length <= 0) {
+              this.store.dispatch(removeField({fieldToDelete: FieldOptionName.Portfolio as string}));
+            }
+          })
         });
       } else if (this.selectedFieldOption?.name === FieldOptionName.CounterParty) {
         this.counterpartySubrules$.pipe(take(1)).subscribe(counterpartySubrules => {
@@ -207,6 +215,13 @@ export class RuleConfigurationComponent implements OnInit {
               value: this.value as string || ""
           };
           this.store.dispatch(addCounterpartySubrule({ newSubrule }));
+          this.counterpartySubrules$.pipe(take(1)).subscribe(subrules => {
+            if (subrules.length > 0) {
+              this.store.dispatch(addField({ newField: FieldOptionName.CounterParty as string }))
+            } else if (subrules.length <= 0) {
+              this.store.dispatch(removeField({fieldToDelete: FieldOptionName.CounterParty as string}));
+            }
+          })
         });
       } else if (this.selectedFieldOption?.name === FieldOptionName.Price) {
         this.priceSubrules$.pipe(take(1)).subscribe(priceSubrules => {
@@ -218,8 +233,20 @@ export class RuleConfigurationComponent implements OnInit {
               value: this.value as string || ""
           };
           this.store.dispatch(addPriceSubrule({ newSubrule }));
+          this.priceSubrules$.pipe(take(1)).subscribe(subrules => {
+            if (subrules.length > 0) {
+              this.store.dispatch(addField({ newField: FieldOptionName.Price as string }))
+            } else if (subrules.length <= 0) {
+              this.store.dispatch(removeField({fieldToDelete: FieldOptionName.Price as string}));
+            }
+          })
         });
       }
+
+      this.selectedFieldOption = undefined;
+      this.fieldType = undefined;
+      this.selectedCondition = undefined;
+      this.value = undefined;
     }
     
   }

@@ -19,6 +19,7 @@ import { Dialog } from 'primeng/dialog';
 import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 import { deleteCounterpartySubrule } from '../../states/counterparty-subrule/counterparty-subrule.actions';
 import { deletePriceSubrule } from '../../states/price-subrule/price-subrule.actions';
+import { addField, removeField } from '../../states/logical-operator-combination/logical-operator-combination.actions';
 @Component({
   selector: 'app-rule',
   standalone: true,
@@ -107,10 +108,31 @@ export class RuleComponent implements OnInit, OnDestroy {
           command: () => {
             if (subrule.field === FieldOptionName.Portfolio) {
               this.store.dispatch(deletePortfolioSubrule({ index: subrule.index }));
+              this.store.select(portfolioSubrulesSlice).pipe(take(1)).subscribe(subrules => {
+                if (subrules.length > 0) {
+                  this.store.dispatch(addField({ newField: FieldOptionName.Portfolio as string }))
+                } else if (subrules.length <= 0) {
+                  this.store.dispatch(removeField({fieldToDelete: FieldOptionName.Portfolio as string}));
+                }
+              })
             } else if (subrule.field === FieldOptionName.CounterParty) {
               this.store.dispatch(deleteCounterpartySubrule({ index: subrule.index }));
+              this.store.select(counterpartySubrulesSlice).pipe(take(1)).subscribe(subrules => {
+                if (subrules.length > 0) {
+                  this.store.dispatch(addField({ newField: FieldOptionName.CounterParty as string }))
+                } else if (subrules.length <= 0) {
+                  this.store.dispatch(removeField({fieldToDelete: FieldOptionName.CounterParty as string}));
+                }
+              })
             } else if (subrule.field === FieldOptionName.Price) {
               this.store.dispatch(deletePriceSubrule({ index: subrule.index }));
+              this.store.select(priceSubrulesSlice).pipe(take(1)).subscribe(subrules => {
+                if (subrules.length > 0) {
+                  this.store.dispatch(addField({ newField: FieldOptionName.Price as string }))
+                } else if (subrules.length <= 0) {
+                  this.store.dispatch(removeField({fieldToDelete: FieldOptionName.Price as string}));
+                }
+              })
             }
             // this.store.select(portfolioSubrulesSlice).pipe(take(1)).subscribe(list => 
             //   list.forEach(item => console.log(item))

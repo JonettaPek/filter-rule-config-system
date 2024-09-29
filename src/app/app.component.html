@@ -4,5 +4,21 @@
         <app-rule [field]="field"></app-rule>
     </div>
 </div>
-
+<div class="jp-logical-container">
+    <div class="jp-logical" *ngFor="let field of (availableFields$ | async); let index = index; let last = last">
+        <h3>{{field}}</h3>
+        <p-dropdown 
+            *ngIf="!last" 
+            inputId="logical-option-id"
+            [options]="logicalOperators" 
+            [(ngModel)]="selectedLogicalOperatorOptions[field]" 
+            optionLabel="name"
+            placeholder="Select a Logical Operator"
+            (ngModelChange)="onLogicalOperatorChange(field, $event)"
+        />
+    </div>
+    <div class="jp-logical">
+        <p-button label="Save" (onClick)="handleSave()" />
+    </div>
+</div>
 <router-outlet />
