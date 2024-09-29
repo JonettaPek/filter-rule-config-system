@@ -8,7 +8,8 @@ export interface LogicalOperatorCombinationState {
 
 export const initialLogicalOperatorCombination: LogicalOperatorCombinationState = {
     availableFields: new Set(),
-    combination: { '': '' }
+    combination: { }
+
 }
 
 export const LogicalOperatorCombinationReducer = createReducer(
