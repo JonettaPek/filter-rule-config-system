@@ -11,7 +11,6 @@
             inputId="field-option-id"
             [options]="fieldOptions" 
             [(ngModel)]="selectedFieldOption" 
-            variant="filled"
             optionLabel="name"
             placeholder="Select a Field" 
             (ngModelChange)="handleFieldTypeAndConditionAndValueInputs($event)"
@@ -21,6 +20,7 @@
         <label for="field-type-id">Field Type</label>
         <input 
             id="field-type-id" 
+            class="disabled"
             type="text"
             pInputText="fieldType"
             [disabled]="true" 
@@ -34,7 +34,7 @@
             inputId="condition-id"
             [options]="conditions" 
             [(ngModel)]="selectedCondition" 
-            variant="filled"
+            optionLabel="name"
             placeholder="Select a Condition"
         />
     </div>

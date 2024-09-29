@@ -10,7 +10,7 @@
                 <th>Actions</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-subrule let-index="rowIndex">
+        <ng-template pTemplate="body" let-subrule let-rowIndex="rowIndex">
             <tr>
                 <td>{{ subrule.index + 1 }}</td>
                 <td>{{ subrule.field }}</td>
@@ -18,7 +18,7 @@
                 <td>{{ subrule.condition }}</td>
                 <td>{{ subrule.value }}</td>
                 <td>
-                    <p-speedDial [model]="getActions(subrule, index)" direction="right" />
+                    <p-speedDial [model]="getActions(subrule, rowIndex)" direction="right" />
                 </td>
             </tr>
         </ng-template>

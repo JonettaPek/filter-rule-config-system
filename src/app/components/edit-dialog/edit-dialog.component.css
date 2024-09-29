@@ -25,8 +25,17 @@ div.jp-inputs-container {
             border-radius: 5px;
             font-size: medium;
             background-color: #fff;
+            color: black;
+
+            &.disabled {
+                opacity: 0.50;
+            }
+
+            &.disabled:hover {
+                cursor: not-allowed;
+            }
         }
-        
+
         .p-inputwrapper, input {
             height: 45px;
             width: 250px;

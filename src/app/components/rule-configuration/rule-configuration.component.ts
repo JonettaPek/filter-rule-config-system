@@ -60,6 +60,11 @@ export enum NumberCondition {
   NotEqualTo = '!='
 }
 
+export interface ConditionOption {
+  name: StringCondition | NumberCondition;
+  code: StringCondition | NumberCondition;
+}
+
 interface Message {
   severity: string,
   detail: string
@@ -82,9 +87,9 @@ export class RuleConfigurationComponent implements OnInit {
 
   fieldType: FieldType | undefined;
 
-  conditions: Array<string> = [];
+  conditions: Array<ConditionOption> = [];
 
-  selectedCondition: string | undefined;
+  selectedCondition: ConditionOption | undefined;
 
   valueInputType: string | undefined;
   
@@ -131,19 +136,50 @@ export class RuleConfigurationComponent implements OnInit {
     this.conditions = []
     if (value.code === FieldOptionCode.Portfolio || value.code === FieldOptionCode.CounterParty) {
       this.fieldType = FieldType.String
-      this.conditions.push(StringCondition.Containing)
-      this.conditions.push(StringCondition.NotContaining)
-      this.conditions.push(StringCondition.BeginningWith)
-      this.conditions.push(StringCondition.EndingWith)
+      this.conditions.push({
+        name: StringCondition.Containing,
+        code: StringCondition.Containing
+      })
+      this.conditions.push({
+        name: StringCondition.NotContaining,
+        code: StringCondition.NotContaining
+      })
+      this.conditions.push({
+        name: StringCondition.BeginningWith,
+        code: StringCondition.BeginningWith
+      })
+      this.conditions.push({
+        name: StringCondition.EndingWith,
+        code: StringCondition.EndingWith
+      })
+      
       this.valueInputType = FieldType.String
     } else if (value.code === FieldOptionCode.Price) {
       this.fieldType = FieldType.Number
-      this.conditions.push(NumberCondition.GreaterThan)
-      this.conditions.push(NumberCondition.GreaterThanOrEqualTo)
-      this.conditions.push(NumberCondition.LessThan)
-      this.conditions.push(NumberCondition.LessThanOrEqualTo)
-      this.conditions.push(NumberCondition.EqualTo)
-      this.conditions.push(NumberCondition.NotEqualTo)
+      this.conditions.push({
+        name: NumberCondition.GreaterThan,
+        code: NumberCondition.GreaterThan
+      })
+      this.conditions.push({
+        name: NumberCondition.GreaterThanOrEqualTo,
+        code: NumberCondition.GreaterThanOrEqualTo
+      })
+      this.conditions.push({
+        name: NumberCondition.LessThan,
+        code: NumberCondition.LessThan
+      })
+      this.conditions.push({
+        name: NumberCondition.LessThanOrEqualTo,
+        code: NumberCondition.LessThanOrEqualTo
+      })
+      this.conditions.push({
+        name: NumberCondition.EqualTo,
+        code: NumberCondition.EqualTo
+      })
+      this.conditions.push({
+        name: NumberCondition.NotEqualTo,
+        code: NumberCondition.NotEqualTo
+      })
       this.valueInputType = FieldType.Number
     }
   }
@@ -156,7 +192,7 @@ export class RuleConfigurationComponent implements OnInit {
               index: portfolioSubrules.length,
               field: this.selectedFieldOption?.name || "",
               fieldType: this.fieldType || "",
-              condition: this.selectedCondition || "",
+              condition: this.selectedCondition?.name || "",
               value: this.value as string || ""
           };
           this.store.dispatch(addPortfolioSubrule({ newSubrule }));
@@ -167,7 +203,7 @@ export class RuleConfigurationComponent implements OnInit {
               index: counterpartySubrules.length,
               field: this.selectedFieldOption?.name || "",
               fieldType: this.fieldType || "",
-              condition: this.selectedCondition || "",
+              condition: this.selectedCondition?.name || "",
               value: this.value as string || ""
           };
           this.store.dispatch(addCounterpartySubrule({ newSubrule }));
@@ -178,7 +214,7 @@ export class RuleConfigurationComponent implements OnInit {
               index: priceSubrules.length,
               field: this.selectedFieldOption?.name || "",
               fieldType: this.fieldType || "",
-              condition: this.selectedCondition || "",
+              condition: this.selectedCondition?.name || "",
               value: this.value as string || ""
           };
           this.store.dispatch(addPriceSubrule({ newSubrule }));

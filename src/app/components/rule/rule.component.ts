@@ -28,20 +28,20 @@ import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 })
 export class RuleComponent implements OnInit, OnDestroy {
   @Input()
-  field: string = 'Portfolio';
+  field: string = '';
 
   rules$: Observable<Subrule[]> | undefined;
 
-  rules: Subrule[] = [{
-    index: 0,
-    field: 'Portfolio',
-    fieldType: 'string',
-    condition: 'Containing',
-    value: 'SG'
-  }];
+  rules: Subrule[] = [];
 
   // mock data
-  
+  // {
+  //   index: 0,
+  //   field: 'Portfolio',
+  //   fieldType: 'string',
+  //   condition: 'Containing',
+  //   value: 'SG'
+  // }
 
   actions: MenuItem[] = [];
   constructor(
@@ -59,9 +59,9 @@ export class RuleComponent implements OnInit, OnDestroy {
       this.rules$ = this.store.select(priceSubrulesSlice)
     }
     
-    // this.rules$?.subscribe(rules => {
-    //   this.rules = rules;
-    // });
+    this.rules$?.subscribe(rules => {
+      this.rules = rules;
+    });
 
   }
   
@@ -88,6 +88,9 @@ export class RuleComponent implements OnInit, OnDestroy {
                 '960px': '75vw',
                 '640px': '90vw'
             },
+            data: {
+              subrule
+            }
           })
         }
       },

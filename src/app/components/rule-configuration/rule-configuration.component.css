@@ -38,6 +38,16 @@ div.input-container {
             padding: 20px;
             border-radius: 5px;
             font-size: medium;
+            background-color: #fff;
+            color: black;
+
+            &.disabled {
+                opacity: 0.50;
+            }
+
+            &.disabled:hover {
+                cursor: not-allowed;
+            }
         }
 
         div.p-splitbutton.p-component {
