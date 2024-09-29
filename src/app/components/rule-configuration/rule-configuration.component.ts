@@ -1,8 +1,20 @@
-import { Component, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MessagesModule } from 'primeng/messages';
+import { addPortfolioSubrule } from '../../states/portfolio-subrule/portfolio-subrule.actions';
+import { PortfolioSubrule, Subrule } from '../../states/portfolio-subrule/portfolio-subrule.reducer';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../states/app.state';
+import { portfolioSubrulesSlice } from '../../states/portfolio-subrule/portfolio-subrule.selector';
+import { Observable, take } from 'rxjs';
+import { CounterpartySubrule } from '../../states/counterparty-subrule/counterparty-subrule.reducer';
+import { PriceSubrule } from '../../states/price-subrule/price-subrule.reducer';
+import { counterpartySubrulesSlice } from '../../states/counterparty-subrule/counterparty-subrule.selector';
+import { priceSubrulesSlice } from '../../states/price-subrule/price-subrule.selector';
+import { addCounterpartySubrule } from '../../states/counterparty-subrule/counterparty-subrule.actions';
+import { addPriceSubrule } from '../../states/price-subrule/price-subrule.actions';
 
 interface MenuItem {
   label: string,
@@ -53,30 +65,6 @@ interface Message {
   detail: string
 }
 
-class Subrule {
-  field: FieldOption | undefined
-  fieldType: string | undefined
-  condition: string | undefined
-  value: string | number | undefined
-
-  constructor(
-    field: FieldOption | undefined,
-    fieldType: string | undefined,
-    condition: string | undefined,
-    value: string | number | undefined
-  ) {
-    this.field = field;
-    this.fieldType = fieldType;
-    this.condition = condition;
-    this.value = value;
-  }
-}
-
-interface RuleNode {
-  logicalOperator: 'AND' | 'OR',
-  subrules: (Subrule | RuleNode)[]
-}
-
 @Component({
   selector: 'app-rule-configuration',
   standalone: true,
@@ -104,12 +92,13 @@ export class RuleConfigurationComponent implements OnInit {
 
   messages: Message[] = [];
 
-  rules: Map<FieldOption, RuleNode> = new Map<FieldOption, RuleNode>();
+  portfolioSubrules$: Observable<PortfolioSubrule[]>;
+  
+  counterpartySubrules$: Observable<CounterpartySubrule[]>;
+  
+  priceSubrules$: Observable<PriceSubrule[]>;
 
-  @Output()
-  newSubrule: Subrule | undefined;
-
-  constructor() {
+  constructor(private store: Store<AppState>) {
     this.menuItems = [
       {
         label: 'Add',
@@ -124,6 +113,10 @@ export class RuleConfigurationComponent implements OnInit {
         }
       }
     ]
+
+    this.portfolioSubrules$ = this.store.select(portfolioSubrulesSlice)
+    this.counterpartySubrules$ = this.store.select(counterpartySubrulesSlice)
+    this.priceSubrules$ = this.store.select(priceSubrulesSlice)
   }
 
   ngOnInit() {
@@ -132,8 +125,6 @@ export class RuleConfigurationComponent implements OnInit {
           { name: FieldOptionName.CounterParty, code: FieldOptionCode.CounterParty },
           { name: FieldOptionName.Price, code: FieldOptionCode.Price }
       ];
-
-      
   }
 
   handleFieldTypeAndConditionAndValueInputs(value: FieldOption) {
@@ -158,16 +149,43 @@ export class RuleConfigurationComponent implements OnInit {
   }
 
   handleAdd() {
-    this.validateValueInput();
-
-    let newSubrule: Subrule = new Subrule(
-      this.selectedFieldOption,
-      this.fieldType,
-      this.selectedCondition,
-      this.value
-    )
+    if (this.validateValueInput()) {
+      if (this.selectedFieldOption?.name === FieldOptionName.Portfolio) {
+        this.portfolioSubrules$.pipe(take(1)).subscribe(portfolioSubrules => {
+          const newSubrule: Subrule = {
+              index: portfolioSubrules.length,
+              field: this.selectedFieldOption?.name || "",
+              fieldType: this.fieldType || "",
+              condition: this.selectedCondition || "",
+              value: this.value as string || ""
+          };
+          this.store.dispatch(addPortfolioSubrule({ newSubrule }));
+        });
+      } else if (this.selectedFieldOption?.name === FieldOptionName.CounterParty) {
+        this.counterpartySubrules$.pipe(take(1)).subscribe(counterpartySubrules => {
+          const newSubrule: Subrule = {
+              index: counterpartySubrules.length,
+              field: this.selectedFieldOption?.name || "",
+              fieldType: this.fieldType || "",
+              condition: this.selectedCondition || "",
+              value: this.value as string || ""
+          };
+          this.store.dispatch(addCounterpartySubrule({ newSubrule }));
+        });
+      } else if (this.selectedFieldOption?.name === FieldOptionName.Price) {
+        this.priceSubrules$.pipe(take(1)).subscribe(priceSubrules => {
+          const newSubrule: Subrule = {
+              index: priceSubrules.length,
+              field: this.selectedFieldOption?.name || "",
+              fieldType: this.fieldType || "",
+              condition: this.selectedCondition || "",
+              value: this.value as string || ""
+          };
+          this.store.dispatch(addPriceSubrule({ newSubrule }));
+        });
+      }
+    }
     
-    this.newSubrule = newSubrule
   }
 
   handleClear() {
@@ -213,7 +231,9 @@ export class RuleConfigurationComponent implements OnInit {
       this.messages = [{ severity: 'error', detail: 'Please enter a Value that is positive, negative or zero.' }];
     } else {
       this.messages = []
+      return true
     }
+    return false
   }
 
   isValidString(inputString: string): boolean {

@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FieldOptionName, RuleConfigurationComponent } from "./components/rule-configuration/rule-configuration.component";
 import { RuleComponent } from "./components/rule/rule.component";
 import { NgFor } from '@angular/common';
-import { SubruleComponent } from "./components/subrule/subrule.component"; 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [NgFor, RouterOutlet, RuleConfigurationComponent, RuleComponent, SubruleComponent],
+  imports: [NgFor, RouterOutlet, RuleConfigurationComponent, RuleComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
   fields: FieldOptionName[] = [];

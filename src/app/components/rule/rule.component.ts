@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../states/app.state';
@@ -7,24 +7,45 @@ import { counterpartySubrulesSlice } from '../../states/counterparty-subrule/cou
 import { priceSubrulesSlice } from '../../states/price-subrule/price-subrule.selector';
 import { Observable } from 'rxjs';
 import { FieldOptionName } from '../rule-configuration/rule-configuration.component';
-import { SubruleComponent } from '../subrule/subrule.component';
 import { AsyncPipe, NgFor } from '@angular/common';
-
+import { TableModule } from 'primeng/table';
+import { CommonModule } from '@angular/common';
+import { Subrule } from '../../states/portfolio-subrule/portfolio-subrule.reducer';
+import { SpeedDialModule } from 'primeng/speeddial';
+import { MenuItem, MessageService } from 'primeng/api';
 @Component({
   selector: 'app-rule',
   standalone: true,
-  imports: [CardModule, SubruleComponent, AsyncPipe, NgFor],
+  imports: [CardModule, AsyncPipe, NgFor, TableModule, CommonModule, SpeedDialModule],
   templateUrl: './rule.component.html',
-  styleUrl: './rule.component.css'
+  styleUrl: './rule.component.css',
+  encapsulation: ViewEncapsulation.None,
+  providers: [MessageService]
 })
-export class RuleComponent implements OnInit {
+export class RuleComponent implements OnInit, OnDestroy {
   @Input()
-  field: string = "";
+  field: string = '';
 
-  rules$: Observable<any[]> | undefined;
+  rules$: Observable<Subrule[]> | undefined;
 
-  constructor(private store: Store<AppState>) { }
+  rules: Subrule[] = [];
 
+  // mock data
+  // {
+  //   index: 0,
+  //   field: 'Portfolio',
+  //   fieldType: 'string',
+  //   condition: 'Containing',
+  //   value: 'SG'
+  // }
+
+  actions: MenuItem[] = [];
+  constructor(
+    private store: Store<AppState>,
+    private messageService: MessageService
+  ) { 
+  }
+  
   ngOnInit(): void {
     if (this.field === FieldOptionName.Portfolio) {
       this.rules$ = this.store.select(portfolioSubrulesSlice)
@@ -33,6 +54,35 @@ export class RuleComponent implements OnInit {
     } else if (this.field === FieldOptionName.Price) {
       this.rules$ = this.store.select(priceSubrulesSlice)
     }
+    
+    this.rules$?.subscribe(rules => {
+      this.rules = rules;
+    });
+
+    this.actions = [
+      {
+          icon: 'pi pi-pencil',
+          command: () => {
+              this.messageService.add({ severity: 'info', summary: 'Add', detail: 'Data Added' });
+          }
+      },
+      {
+          icon: 'pi pi-refresh',
+          command: () => {
+              this.messageService.add({ severity: 'success', summary: 'Update', detail: 'Data Updated' });
+          }
+      },
+      {
+          icon: 'pi pi-trash',
+          command: () => {
+              this.messageService.add({ severity: 'error', summary: 'Delete', detail: 'Data Deleted' });
+          }
+      }
+    ];
+  }
+  
+  ngOnDestroy(): void {
+    // unsubscribe to custom observables
   }
 
 }

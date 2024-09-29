@@ -15,15 +15,15 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideStore(),
     provideState({
-      name: 'Portfolio Subrules',
+      name: 'portfolioRuleState',
       reducer: PortfolioRuleReducer
     }),
     provideState({
-      name: 'Counterparty Subrules',
+      name: 'counterpartyRuleState',
       reducer: CounterpartyRuleReducer
     }),
     provideState({
-      name: 'Price Subrules',
+      name: 'priceRuleState',
       reducer: PriceRuleReducer
     })
   ]

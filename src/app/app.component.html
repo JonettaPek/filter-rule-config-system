@@ -1,6 +1,8 @@
 <app-rule-configuration></app-rule-configuration>
-<div *ngFor="let field of fields">
-    <app-rule [field]="field"></app-rule>
+<div class="jp-rules-container">
+    <div class="jp-rule" *ngFor="let field of fields">
+        <app-rule [field]="field"></app-rule>
+    </div>
 </div>
 
 <router-outlet />

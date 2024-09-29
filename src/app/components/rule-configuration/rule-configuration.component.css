@@ -1,5 +1,8 @@
 /* Mobile First Design */
 div.input-container {
+    position: relative;
+    z-index: 1000;
+
     width: 100%;
     background-color: rgba(17, 25, 40, 0.75);
     backdrop-filter: blur(19px) saturate(180%);
@@ -24,7 +27,11 @@ div.input-container {
         }
 
         .p-inputwrapper {
-            
+
+            .p-dropdown-panel {
+                position: relative;
+                z-index: 1001;
+            }
         }
 
         input {

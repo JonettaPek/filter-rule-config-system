@@ -1,8 +1,26 @@
 <p-card header={{field}}>
-    <div *ngFor="let subrule of (rules$ | async); let i = index">
-        <app-subrule
-            [index]="i"
-            [subrule]="subrule"
-        ></app-subrule>
-    </div>
+    <p-table [value]="rules" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th>Field</th>
+                <th>Field Type</th>
+                <th>Condition</th>
+                <th>Value</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-subrule let-index="rowIndex">
+            <tr>
+                <td>{{ subrule.index + 1 }}</td>
+                <td>{{ subrule.field }}</td>
+                <td>{{ subrule.fieldType }}</td>
+                <td>{{ subrule.condition }}</td>
+                <td>{{ subrule.value }}</td>
+                <td>
+                    <p-speedDial [model]="actions" direction="right" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
 </p-card>

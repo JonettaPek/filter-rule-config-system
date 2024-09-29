@@ -14,15 +14,22 @@ export const initialPriceRuleState: PriceRuleState = {
 
 export const PriceRuleReducer = createReducer(
     initialPriceRuleState,
-    on(addPriceSubrule, (state, {newSubrule}) => ({priceSubrules: [...state.priceSubrules, newSubrule]})),
-    on(deletePriceSubrule, (state, {index}) => {
-        state.priceSubrules.splice(index, 1)
-        return {priceSubrules: [...state.priceSubrules]}
-    }),
-    on(editPriceSubrule, (state, {index, updatedSubrule}) => {
-        state.priceSubrules.splice(index, 1)
-        state.priceSubrules[index] = updatedSubrule
-        return {priceSubrules: [...state.priceSubrules]}
-    }),
-   on(revertPriceSubrule, (state) => ({priceSubrules: [...state.priceSubrules]}))
+    on(addPriceSubrule, (state, { newSubrule }) => ({
+        ...state,
+        priceSubrules: [...state.priceSubrules, newSubrule]
+    })),
+    on(deletePriceSubrule, (state, { index }) => ({
+        ...state,
+        priceSubrules: state.priceSubrules.filter((_, i) => i !== index)
+    })),
+    on(editPriceSubrule, (state, { index, updatedSubrule }) => ({
+        ...state,
+        priceSubrules: state.priceSubrules.map((subrule, i) =>
+          i === index ? { ...subrule, ...updatedSubrule } : subrule
+        )
+    })),
+    on(revertPriceSubrule, (state) => ({
+        ...state,
+        priceSubrules: [...state.priceSubrules]
+    }))
 )

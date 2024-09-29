@@ -3,10 +3,10 @@ import { addPortfolioSubrule, deletePortfolioSubrule, editPortfolioSubrule, reve
 
 export interface Subrule {
     index: number,
-    field: string | undefined,
-    fieldType: string | undefined,
-    condition: string | undefined,
-    value: string | undefined,
+    field: string,
+    fieldType: string,
+    condition: string,
+    value: string,
     
 }
 
@@ -22,15 +22,22 @@ export const initialPortfolioRuleState: PortfolioRuleState = {
 
 export const PortfolioRuleReducer = createReducer(
     initialPortfolioRuleState,
-    on(addPortfolioSubrule, (state, {newSubrule}) => ({portfolioSubrules: [...state.portfolioSubrules, newSubrule]})),
-    on(deletePortfolioSubrule, (state, {index}) => {
-        state.portfolioSubrules.splice(index, 1)
-        return {portfolioSubrules: [...state.portfolioSubrules]}
-    }),
-    on(editPortfolioSubrule, (state, {index, updatedSubrule}) => {
-        state.portfolioSubrules.splice(index, 1)
-        state.portfolioSubrules[index] = updatedSubrule
-        return {portfolioSubrules: [...state.portfolioSubrules]}
-    }),
-   on(revertPortfolioSubrule, (state) => ({portfolioSubrules: [...state.portfolioSubrules]}))
+    on(addPortfolioSubrule, (state, { newSubrule }) => ({
+        ...state,
+        portfolioSubrules: [...state.portfolioSubrules, newSubrule]
+    })),
+    on(deletePortfolioSubrule, (state, { index }) => ({
+        ...state,
+        portfolioSubrules: state.portfolioSubrules.filter((_, i) => i !== index)
+    })),
+    on(editPortfolioSubrule, (state, { index, updatedSubrule }) => ({
+        ...state,
+        portfolioSubrules: state.portfolioSubrules.map((subrule, i) =>
+          i === index ? { ...subrule, ...updatedSubrule } : subrule
+        )
+    })),
+    on(revertPortfolioSubrule, (state) => ({
+        ...state,
+        portfolioSubrules: [...state.portfolioSubrules]
+    }))
 )

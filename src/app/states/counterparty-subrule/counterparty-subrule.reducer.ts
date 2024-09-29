@@ -14,15 +14,22 @@ export const initialCounterpartyRuleState: CounterpartyRuleState = {
 
 export const CounterpartyRuleReducer = createReducer(
     initialCounterpartyRuleState,
-    on(addCounterpartySubrule, (state, {newSubrule}) => ({counterpartySubrules: [...state.counterpartySubrules, newSubrule]})),
-    on(deleteCounterpartySubrule, (state, {index}) => {
-        state.counterpartySubrules.splice(index, 1)
-        return {counterpartySubrules: [...state.counterpartySubrules]}
-    }),
-    on(editCounterpartySubrule, (state, {index, updatedSubrule}) => {
-        state.counterpartySubrules.splice(index, 1)
-        state.counterpartySubrules[index] = updatedSubrule
-        return {counterpartySubrules: [...state.counterpartySubrules]}
-    }),
-   on(revertCounterpartySubrule, (state) => ({counterpartySubrules: [...state.counterpartySubrules]}))
+    on(addCounterpartySubrule, (state, { newSubrule }) => ({
+        ...state,
+        counterpartySubrules: [...state.counterpartySubrules, newSubrule]
+    })),
+    on(deleteCounterpartySubrule, (state, { index }) => ({
+        ...state,
+        counterpartySubrules: state.counterpartySubrules.filter((_, i) => i !== index)
+    })),
+    on(editCounterpartySubrule, (state, { index, updatedSubrule }) => ({
+        ...state,
+        portfolioSubrules: state.counterpartySubrules.map((subrule, i) =>
+          i === index ? { ...subrule, ...updatedSubrule } : subrule
+        )
+    })),
+    on(revertCounterpartySubrule, (state) => ({
+        ...state,
+        counterpartySubrules: [...state.counterpartySubrules]
+    }))
 )

@@ -1,0 +1,22 @@
+.p-card.p-component {
+    background-color: rgba(17, 25, 40, 0.75);
+    backdrop-filter: blur(19px) saturate(180%);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+    color: white;
+
+    tbody tr {
+        height: 65px;
+    }
+
+    td div.p-speeddial {
+        position: relative;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    td button {
+        height: 32px;
+        width: 32px;
+    }
+}
