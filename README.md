@@ -1,27 +1,72 @@
-# FilterRuleConfigSystem
+#UI Layout
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.6.
+#On start up
++------------------------------------+
+|------------------------------------|
+|--- Rule Configuration Component ---|
+|------------------------------------|
++------------------------------------+
 
-## Development server
+&& +-------------+ +-------------+ &&
+&& |-------------| |-------------| &&
+&& |-- Rule 1 ---| |-- Rule 2 ---| &&
+&& |-------------| |-------------| &&
+&& +-------------+ +-------------+ &&
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+&& +-------------+ &&&&&&&&&&&&&&&&&&
+&& |-------------| &&&&&&&&&&&&&&&&&&
+&& |-- Rule 3 ---| &&&&&&&&&&&&&&&&&&
+&& |-------------| &&&&&&&&&&&&&&&&&&
+&& +-------------+ &&&&&&&&&&&&&&&&&&
 
-## Code scaffolding
+#When subrules are being added
++------------------------------------+
+|------------------------------------|
+|--- Rule Configuration Component ---|
+|------------------------------------|
++------------------------------------+
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+&& +-------------+ +-------------+ &&
+&& |-------------| |-------------| &&
+&& |-- Rule 1 ---| |-- Rule 2 ---| &&
+&& |-------------| |-------------| &&
+&& +-------------+ +-------------+ &&
 
-## Build
+&& +-------------+ &&&&&&&&&&&&&&&&&&
+&& |-------------| &&&&&&&&&&&&&&&&&&
+&& |-- Rule 3 ---| &&&&&&&&&&&&&&&&&&
+&& |-------------| &&&&&&&&&&&&&&&&&&
+&& +-------------+ &&&&&&&&&&&&&&&&&&
++------------------------------------+
+|------------------------------------|
+|-- Logical Operator between Rules --|
+|------------------------------------|
++------------------------------------+
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Dialog when editing a subrule
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&+---------------+&&&&&&&&&&&
+&&&&&&&&&&|---------------|&&&&&&&&&&&
+&&&&&&&&&&|--- Dialog ----|&&&&&&&&&&&
+&&&&&&&&&&|---------------|&&&&&&&&&&&
+&&&&&&&&&&+---------------+&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
-## Running unit tests
+#Implementation
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. Rule Configuration Component:
+   a. Inputs: - Field (Dropdown) - Field Type (Text, readonly) - Condition (Dropdown) - Value (Text | Number)
+   b. Datatypes for Field input options: - Portfolio (string) - Counterparty (string) - Price (number)
+   c. Selecting an option for Field presets the Field Type and Condition: - Field = Portfolio or Counterparty => Field Type = string, Condition = Containing || Not Containing || Beginning With || Ending With - Field = Price => Field Type = number, Condition = Greater Than || Greater Than or Equal To || Lesser Than || Lesser Than or Equal To || Equal To || Not Equal To
+   d. Validation check:
