@@ -5,10 +5,12 @@ import { addPriceSubrule, deletePriceSubrule, editPriceSubrule, revertPriceSubru
 export type PriceSubrule = Subrule
 
 export interface PriceRuleState {
+    lastId: number
     priceSubrules: PriceSubrule[]
 }
 
 export const initialPriceRuleState: PriceRuleState = {
+    lastId: -1,
     priceSubrules: []
 }
 
@@ -16,7 +18,8 @@ export const PriceRuleReducer = createReducer(
     initialPriceRuleState,
     on(addPriceSubrule, (state, { newSubrule }) => ({
         ...state,
-        priceSubrules: [...state.priceSubrules, newSubrule]
+        lastId: state.lastId + 1,
+        priceSubrules: [...state.priceSubrules, { ...newSubrule, index: state.lastId + 1 }]
     })),
     on(deletePriceSubrule, (state, { index }) => ({
         ...state,

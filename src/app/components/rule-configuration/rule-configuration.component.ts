@@ -189,7 +189,7 @@ export class RuleConfigurationComponent implements OnInit {
       if (this.selectedFieldOption?.name === FieldOptionName.Portfolio) {
         this.portfolioSubrules$.pipe(take(1)).subscribe(portfolioSubrules => {
           const newSubrule: Subrule = {
-              index: portfolioSubrules.length,
+              index: -1,
               field: this.selectedFieldOption?.name || "",
               fieldType: this.fieldType || "",
               condition: this.selectedCondition?.name || "",
@@ -200,7 +200,7 @@ export class RuleConfigurationComponent implements OnInit {
       } else if (this.selectedFieldOption?.name === FieldOptionName.CounterParty) {
         this.counterpartySubrules$.pipe(take(1)).subscribe(counterpartySubrules => {
           const newSubrule: Subrule = {
-              index: counterpartySubrules.length,
+              index: -1,
               field: this.selectedFieldOption?.name || "",
               fieldType: this.fieldType || "",
               condition: this.selectedCondition?.name || "",
@@ -211,7 +211,7 @@ export class RuleConfigurationComponent implements OnInit {
       } else if (this.selectedFieldOption?.name === FieldOptionName.Price) {
         this.priceSubrules$.pipe(take(1)).subscribe(priceSubrules => {
           const newSubrule: Subrule = {
-              index: priceSubrules.length,
+              index: -1,
               field: this.selectedFieldOption?.name || "",
               fieldType: this.fieldType || "",
               condition: this.selectedCondition?.name || "",

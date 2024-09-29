@@ -40,8 +40,6 @@ export class EditDialogComponent implements OnInit, OnDestroy {
   
   value: string | undefined;
 
-  visible: boolean = true;
-
   currentSubrule: Subrule | undefined;
 
   constructor(
@@ -142,6 +140,10 @@ export class EditDialogComponent implements OnInit, OnDestroy {
     } else if (this.currentSubrule?.field === FieldOptionName.Price) {
       this.store.dispatch(editPriceSubrule(updatedInfo))
     }
+    this.close();
+  }
+
+  handleCancel() {
     this.close();
   }
 

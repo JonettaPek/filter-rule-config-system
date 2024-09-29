@@ -5,10 +5,12 @@ import { addCounterpartySubrule, deleteCounterpartySubrule, editCounterpartySubr
 export type CounterpartySubrule = Subrule
 
 export interface CounterpartyRuleState {
+    lastId: number
     counterpartySubrules: CounterpartySubrule[]
 }
 
 export const initialCounterpartyRuleState: CounterpartyRuleState = {
+    lastId: -1,
     counterpartySubrules: []
 }
 
@@ -16,7 +18,8 @@ export const CounterpartyRuleReducer = createReducer(
     initialCounterpartyRuleState,
     on(addCounterpartySubrule, (state, { newSubrule }) => ({
         ...state,
-        counterpartySubrules: [...state.counterpartySubrules, newSubrule]
+        lastId: state.lastId + 1,
+        counterpartySubrules: [...state.counterpartySubrules, { ...newSubrule, index: state.lastId + 1 }]
     })),
     on(deleteCounterpartySubrule, (state, { index }) => ({
         ...state,

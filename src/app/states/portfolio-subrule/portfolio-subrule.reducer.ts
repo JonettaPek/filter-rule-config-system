@@ -13,10 +13,12 @@ export interface Subrule {
 export type PortfolioSubrule = Subrule
 
 export interface PortfolioRuleState {
+    lastId: number
     portfolioSubrules: PortfolioSubrule[]
 }
 
 export const initialPortfolioRuleState: PortfolioRuleState = {
+    lastId: -1,
     portfolioSubrules: []
 }
 
@@ -24,7 +26,8 @@ export const PortfolioRuleReducer = createReducer(
     initialPortfolioRuleState,
     on(addPortfolioSubrule, (state, { newSubrule }) => ({
         ...state,
-        portfolioSubrules: [...state.portfolioSubrules, newSubrule]
+        lastId: state.lastId + 1,
+        portfolioSubrules: [...state.portfolioSubrules, { ...newSubrule, index: state.lastId + 1 }]
     })),
     on(deletePortfolioSubrule, (state, { index }) => ({
         ...state,

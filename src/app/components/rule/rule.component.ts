@@ -5,7 +5,7 @@ import { AppState } from '../../states/app.state';
 import { portfolioSubrulesSlice } from '../../states/portfolio-subrule/portfolio-subrule.selector';
 import { counterpartySubrulesSlice } from '../../states/counterparty-subrule/counterparty-subrule.selector';
 import { priceSubrulesSlice } from '../../states/price-subrule/price-subrule.selector';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { FieldOptionName } from '../rule-configuration/rule-configuration.component';
 import { AsyncPipe, NgFor } from '@angular/common';
 import { TableModule } from 'primeng/table';
@@ -14,9 +14,11 @@ import { Subrule } from '../../states/portfolio-subrule/portfolio-subrule.reduce
 import { SpeedDialModule } from 'primeng/speeddial';
 import { MenuItem } from 'primeng/api';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
-import { editPortfolioSubrule } from '../../states/portfolio-subrule/portfolio-subrule.actions';
+import { deletePortfolioSubrule, editPortfolioSubrule } from '../../states/portfolio-subrule/portfolio-subrule.actions';
 import { Dialog } from 'primeng/dialog';
 import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
+import { deleteCounterpartySubrule } from '../../states/counterparty-subrule/counterparty-subrule.actions';
+import { deletePriceSubrule } from '../../states/price-subrule/price-subrule.actions';
 @Component({
   selector: 'app-rule',
   standalone: true,
@@ -69,7 +71,7 @@ export class RuleComponent implements OnInit, OnDestroy {
     // unsubscribe to custom observables
   }
   
-  getActions(subrule: Subrule, index: number): MenuItem[] {
+  getActions(subrule: Subrule, rowIndex: number): MenuItem[] {
     return [
       {
         icon: 'pi pi-pencil',
@@ -103,7 +105,22 @@ export class RuleComponent implements OnInit, OnDestroy {
       {
           icon: 'pi pi-trash',
           command: () => {
-  
+            if (subrule.field === FieldOptionName.Portfolio) {
+              this.store.dispatch(deletePortfolioSubrule({ index: subrule.index }));
+            } else if (subrule.field === FieldOptionName.CounterParty) {
+              this.store.dispatch(deleteCounterpartySubrule({ index: subrule.index }));
+            } else if (subrule.field === FieldOptionName.Price) {
+              this.store.dispatch(deletePriceSubrule({ index: subrule.index }));
+            }
+            // this.store.select(portfolioSubrulesSlice).pipe(take(1)).subscribe(list => 
+            //   list.forEach(item => console.log(item))
+            // )
+            // this.store.select(counterpartySubrulesSlice).pipe(take(1)).subscribe(list => 
+            //   list.forEach(item => console.log(item))
+            // )
+            // this.store.select(priceSubrulesSlice).pipe(take(1)).subscribe(list => 
+            //   list.forEach(item => console.log(item))
+            // )
           }
       }
     ];
